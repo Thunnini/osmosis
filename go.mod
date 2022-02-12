@@ -122,7 +122,7 @@ require (
 
 replace (
 	// Our cosmos-sdk branch is:  https://github.com/osmosis-labs/cosmos-sdk  v0.44.3x-osmo-v5
-	github.com/cosmos/cosmos-sdk => github.com/Thunnini/cosmos-sdk v0.43.0-rc3.0.20220211151352-69844b19b102
+	github.com/cosmos/cosmos-sdk => github.com/Thunnini/cosmos-sdk v0.43.0-rc3.0.20220212140612-6223234331b4
 	github.com/cosmos/ibc-go/v2 => github.com/osmosis-labs/ibc-go/v2 v2.0.2-osmo
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 	github.com/tecbot/gorocksdb => github.com/cosmos/gorocksdb v1.1.1

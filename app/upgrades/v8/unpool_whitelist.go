@@ -32,14 +32,14 @@ func RegisterWhitelistedDirectUnbondPools(ctx sdk.Context, superfluid *superflui
 	// Added pools #580 and #635
 	// Jacob, Geo are in favor of adding the not listed UST pools with > 1k liquidity.
 	// TODO: Circulate to validators to get agreement.
-	whitelistedPoolShares := []uint64{560, 562, 567, 578, 592, 610, 612, 615, 642, 679, 580, 635}
+	whitelistedPoolShares := []uint64{1, 2, 3}
 
 	// Consistency check that each whitelisted pool contains UST
-	for _, whitelistedPool := range whitelistedPoolShares {
-		if err := CheckPoolContainsUST(ctx, gamm, whitelistedPool); err != nil {
-			panic(err)
-		}
-	}
+	//for _, whitelistedPool := range whitelistedPoolShares {
+	//	if err := CheckPoolContainsUST(ctx, gamm, whitelistedPool); err != nil {
+	//		panic(err)
+	//	}
+	//}
 
 	superfluid.SetUnpoolAllowedPools(ctx, whitelistedPoolShares)
 }

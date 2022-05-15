@@ -9,5 +9,5 @@ const (
 	// UpgradeHeight defines the block height at which the Osmosis v8 upgrade is
 	// triggered.
 	// Block height 4_402_000, approximately 4PM UTC, May 15th
-	UpgradeHeight = 4402000
+	UpgradeHeight = 50
 )

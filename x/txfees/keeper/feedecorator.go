@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"fmt"
+	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -132,22 +133,36 @@ func (mfd MempoolFeeDecorator) GetMinBaseGasPriceForTx(ctx sdk.Context, baseDeno
 //
 // CONTRACT: Tx must implement FeeTx interface to use DeductFeeDecorator
 type DeductFeeDecorator struct {
-	ak             types.AccountKeeper
-	bankKeeper     types.BankKeeper
-	feegrantKeeper types.FeegrantKeeper
-	txFeesKeeper   Keeper
+	ak              types.AccountKeeper
+	bankKeeper      types.BankKeeper
+	feegrantKeeper  types.FeegrantKeeper
+	txFeesKeeper    Keeper
+	signModeHandler authsigning.SignModeHandler
 }
 
-func NewDeductFeeDecorator(tk Keeper, ak types.AccountKeeper, bk types.BankKeeper, fk types.FeegrantKeeper) DeductFeeDecorator {
+func NewDeductFeeDecorator(tk Keeper, ak types.AccountKeeper, bk types.BankKeeper, fk types.FeegrantKeeper, signModeHandler authsigning.SignModeHandler) DeductFeeDecorator {
 	return DeductFeeDecorator{
-		ak:             ak,
-		bankKeeper:     bk,
-		feegrantKeeper: fk,
-		txFeesKeeper:   tk,
+		ak:              ak,
+		bankKeeper:      bk,
+		feegrantKeeper:  fk,
+		txFeesKeeper:    tk,
+		signModeHandler: signModeHandler,
 	}
 }
 
 func (dfd DeductFeeDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
+	chainID := ctx.ChainID()
+	signerData := authsigning.SignerData{
+		ChainID:       chainID,
+		AccountNumber: 1,
+		Sequence:      1,
+	}
+	bz, err := dfd.signModeHandler.GetSignBytes(127, signerData, tx)
+	if err != nil {
+		panic(err)
+	}
+	ctx.Logger().Info(string(bz))
+
 	feeTx, ok := tx.(sdk.FeeTx)
 	if !ok {
 		return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "Tx must be a FeeTx")
